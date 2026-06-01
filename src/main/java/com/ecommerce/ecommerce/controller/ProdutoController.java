@@ -1,5 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.ecommerce.ecommerce.dto.ProdutoRequestDTO;
 import com.ecommerce.ecommerce.dto.ProdutoResponseDTO;
 import com.ecommerce.ecommerce.entity.Produto;
@@ -13,10 +15,15 @@ import java.util.stream.StreamSupport;
 @RestController
 @RequestMapping("/api/v1/produtos")
 @RequiredArgsConstructor
+@Tag(
+        name = "Produtos",
+        description = "Operações relacionadas aos produtos"
+)
 public class ProdutoController {
 
     private final ProdutoService service;
 
+    @Operation(summary = "Listar todos os produtos")
     @GetMapping
     public ResponseEntity<Iterable<ProdutoResponseDTO>> listar() {
 
@@ -29,6 +36,7 @@ public class ProdutoController {
         return ResponseEntity.ok(resposta);
     }
 
+    @Operation(summary = "Buscar produto por ID")
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> buscar(
             @PathVariable Long id) {
@@ -39,6 +47,7 @@ public class ProdutoController {
                 ProdutoResponseDTO.fromEntity(produto));
     }
 
+    @Operation(summary = "Cadastrar novo produto")
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> criar(
             @Valid @RequestBody ProdutoRequestDTO dto) {
@@ -55,6 +64,7 @@ public class ProdutoController {
                 .body(ProdutoResponseDTO.fromEntity(salvo));
     }
 
+    @Operation(summary = "Atualizar produto")
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizar(
             @PathVariable Long id,
@@ -72,6 +82,7 @@ public class ProdutoController {
                 ProdutoResponseDTO.fromEntity(atualizado));
     }
 
+    @Operation(summary = "Remover produto")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(
             @PathVariable Long id) {
